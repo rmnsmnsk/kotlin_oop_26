@@ -4,7 +4,7 @@ class SingleLinkedList : CustomList {
 
     private var head: Node? = null
     private var size_: Int = 0
-
+  
     override val size: Int
         get() = size_
 
