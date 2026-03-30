@@ -2,45 +2,119 @@ package org.example
 
 class SingleLinkedList : CustomList {
 
-    private val inner = mutableListOf<Int>()
+    private var head: Node? = null
+    private var size_: Int = 0
 
     override val size: Int
-        get() = TODO("Implement this")
+        get() = size_
 
     override fun add(element: Int) {
-        TODO("Implement this")
+        val new: Node = Node(element)
+        if (head == null){
+            head = new
+            size_ = 1
+            return
+        }
+        var current: Node? = head
+        while (current?.next != null){
+            current = current.next
+        }
+        current?.next = new
+        size_++
     }
 
     override operator fun set(index: Int, value: Int) {
-        TODO("Implement this")
+        var current: Node? = head
+        var count: Int = 0
+        while (current != null){
+            if (count == index){
+                current.data = value
+                return
+            }
+            current = current.next
+            count++
+        }
     }
 
     override fun addFirst(element: Int) {
-        TODO("Implement this")
+        val new: Node = Node(element)
+        var temp: Node? = head
+        head = new
+        new.next = temp
+        size_++
     }
 
     override operator fun get(index: Int): Int {
-        TODO("Implement this")
+        var current: Node? = head
+        var count: Int = 0
+        while (current != null){
+            if (count == index){
+                return current.data
+            }
+            current = current.next
+            count++
+        }
+        throw IndexOutOfBoundsException()
     }
 
+
     override fun indexOf(element: Int): Int {
-        TODO("Implement this")
+        var current: Node? = head
+        var index: Int = 0
+        while (current != null){
+            if (current.data == element){
+                return index
+            }
+            current = current.next
+            index++
+        }
+        return -1
     }
 
     override fun remove(element: Int): Boolean {
-        TODO("Implement this")
+        if (head == null){
+            return false
+        }
+        if (head?.data == element){
+            head = head?.next
+            size_ --
+            return true
+        }
+        var current: Node? = head
+        while (current?.next != null){
+            if (current.next?.data == element){
+                current.next = current.next?.next
+                size_ --
+                return true
+            }
+            current = current.next
+        }
+        return false
     }
 
     override fun iterator(): Iterator<Int> {
         return object : Iterator<Int> {
+            private var current: Node? = head
             override fun hasNext(): Boolean {
-                TODO("Implement this")
+                return current != null
             }
 
             override fun next(): Int {
-                TODO("Implement this")
-            }
+                if (!hasNext()) throw NoSuchElementException()
+                val data = current!!.data
+                current = current?.next
+                return data
+                }
         }
+    }
+
+    fun clear() {
+        head = null
+        size_ = 0
+    }
+
+    fun isEmpty(): Boolean {
+        return size_ == 0
     }
 
     companion object {
@@ -49,4 +123,9 @@ class SingleLinkedList : CustomList {
                 list.also{ it.add(item) }
             }
     }
+}
+
+class  Node(data: Int){
+    var data: Int = data
+    var next: Node? = null
 }

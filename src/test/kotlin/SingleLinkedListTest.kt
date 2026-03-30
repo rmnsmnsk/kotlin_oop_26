@@ -101,4 +101,51 @@ class SingleLinkedListTest {
         list[2] = 5
         assertEquals(5, list[2])
     }
+
+    @Test
+    fun `clear removes all elements`() {
+        list.add(1)
+        list.add(2)
+        list.add(3)
+
+        list.clear()
+
+        assertEquals(0, list.size)
+        assertFalse(list.contains(1))
+        assertFalse(list.contains(2))
+        assertFalse(list.contains(3))
+        assertThrows(IndexOutOfBoundsException::class.java) {
+            list[0]
+        }
+    }
+
+    @Test
+    fun `isEmpty returns correct state`() {
+        assertTrue(list.isEmpty())
+
+        list.add(1)
+        assertFalse(list.isEmpty())
+
+        list.remove(1)
+        assertTrue(list.isEmpty())
+    }
+
+    @Test
+    fun `addFirst with multiple elements maintains correct order`() {
+        list.addFirst(3)
+        list.addFirst(2)
+        list.addFirst(1)
+
+        assertEquals(3, list.size)
+        assertEquals(1, list[0])
+        assertEquals(2, list[1])
+        assertEquals(3, list[2])
+
+        val expectedValues = listOf(1, 2, 3)
+        for ((index, value) in list.withIndex()) {
+            assertEquals(expectedValues[index], value)
+        }
+    }
+
+
 }
