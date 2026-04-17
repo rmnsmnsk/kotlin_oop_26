@@ -1,32 +1,42 @@
 package org.example.stack
 
 import org.example.list.SingleLinkedList
+import java.util.NoSuchElementException
 
-class SingleLinkedStack : SingleLinkedList() {
+class SingleLinkedStack : Stack {
+    private val list = SingleLinkedList()
 
-    val isepmty: Boolean
-        get(){
-            return size == 0
-        }
+    override val isEmpty: Boolean
+        get() = list.size == 0
 
-    fun push(value: Int){
-        addFirst(value)
+    override val size: Int
+        get() = list.size
 
+    override fun push(value: Int) {
+        list.addFirst(value)
     }
 
-    fun pop(): Int{
-        if (isepmty){
-            throw NoSuchElementException()
+    override fun pop(): Int {
+        if (isEmpty) {
+            throw NoSuchElementException("Stack is empty")
         }
-        val el = get(0)
-        remove(el)
-        return el
+        val element = list[0]
+        list.remove(element)
+        return element
     }
 
-    fun peek(): Int{
-        if (isepmty){
-            throw NoSuchElementException()
+    override fun peek(): Int {
+        if (isEmpty) {
+            throw NoSuchElementException("Stack is empty")
         }
-        return get(0)
+        return list[0]
     }
+
+    override fun add(element: Int) = list.add(element)
+    override fun addFirst(element: Int) = list.addFirst(element)
+    override fun remove(element: Int): Boolean = list.remove(element)
+    override fun indexOf(element: Int): Int = list.indexOf(element)
+    override fun get(index: Int): Int = list[index]
+    override fun set(index: Int, value: Int) = list.set(index, value)
+    override fun iterator(): Iterator<Int> = list.iterator()
 }

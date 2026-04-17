@@ -1,95 +1,84 @@
 package org.example.list
 
-open class CustomArrayList(size: Int = 10): CustomList {
+class CustomArrayList(initialCapacity: Int = 10) : CustomList {
+    private var capacity = initialCapacity
+    private var inner = IntArray(capacity)
+    private var currentSize = 0
 
-    var inner = IntArray(size)
-    var current_size: Int = 0
-    override var size: Int = size
+    override val size: Int
+        get() = currentSize
 
-    override operator fun get(index: Int): Int{
-        return inner[index]
-    }
-    override operator fun set(index: Int, value: Int){
-        inner[index] = value
-    }
-
-    override fun add(value: Int) {
-        if (current_size >= size) {
-            resize(current_size * 2)
+    override fun add(element: Int) {
+        if (currentSize >= capacity) {
+            capacity = capacity * 2
+            inner = inner.copyOf(capacity)
         }
-        inner[current_size] = value
-        current_size++
+        inner[currentSize] = element
+        currentSize++
     }
 
-    fun resize(newSize: Int) {
-        val newlist = IntArray(newSize)
-        for (i in 0 until current_size){
-            newlist[i] = this.inner[i]
+    override fun addFirst(element: Int) {
+        if (currentSize >= capacity) {
+            capacity = capacity * 2
+            inner = inner.copyOf(capacity)
         }
-        inner = newlist
-        size = newSize
-    }
-
-    override fun addFirst(element: Int){
-        if (current_size >= size){
-            resize (current_size * 2)
+        for (i in currentSize downTo 1) {
+            inner[i] = inner[i - 1]
         }
-        var newlist = IntArray(size)
-        for (i in 0 until current_size){
-            newlist[i + 1] = inner[i]
-        }
-        newlist[0] = element
-        inner = newlist
-        current_size++
+        inner[0] = element
+        currentSize++
     }
 
     override fun remove(element: Int): Boolean {
-        var found = false
-        var newIndex = 0
-        val newlist = IntArray(size)
-        for (i in 0 until current_size) {
-            if (inner[i] != element) {
-                newlist[newIndex] = inner[i]
-                newIndex++
-            } else {
-                found = true
-            }
+        val index = indexOf(element)
+        if (index < 0) return false
+
+        for (i in index until currentSize - 1) {
+            inner[i] = inner[i + 1]
         }
-        if (found) {
-            inner = newlist
-            current_size = newIndex
-            return true
-        }
-        return false
+        currentSize--
+        return true
     }
-    override fun indexOf(element: Int): Int{
-        var index = 0
-        for (i in 0 until current_size){
-            if (inner[i] == element){
-                return index
-            }
-            index++
+
+    override fun indexOf(element: Int): Int {
+        for (i in 0 until currentSize) {
+            if (inner[i] == element) return i
         }
         return -1
     }
 
+    override operator fun get(index: Int): Int {
+        if (index < 0 || index >= currentSize) {
+            throw IndexOutOfBoundsException("Index: $index, Size: $currentSize")
+        }
+        return inner[index]
+    }
+
+    override operator fun set(index: Int, value: Int) {
+        if (index < 0 || index >= currentSize) {
+            throw IndexOutOfBoundsException("Index: $index, Size: $currentSize")
+        }
+        inner[index] = value
+    }
+
     override fun iterator(): Iterator<Int> {
         return object : Iterator<Int> {
-            var index = 0
+            private var index = 0
 
-            override fun hasNext(): Boolean {
-                return index < current_size
-            }
+            override fun hasNext(): Boolean = index < currentSize
+
             override fun next(): Int {
+                if (!hasNext()) throw NoSuchElementException()
                 return inner[index++]
             }
         }
     }
 
     companion object {
-        fun customArrayListOf(vararg items: Int) =
-            items.fold(CustomArrayList(items.size)) { list, item ->
-                list.also { it.add(item) }
-            }
+        fun customArrayListOf(vararg items: Int): CustomArrayList {
+            val list = CustomArrayList(items.size)
+            items.forEach { list.add(it) }
+            return list
+        }
     }
 }

@@ -1,42 +1,41 @@
 package org.example
 
-import org.example.list.SingleLinkedList
 import org.example.list.CustomArrayList
+import org.example.list.SingleLinkedList
 import org.example.stack.ArrayListStack
 import org.example.stack.SingleLinkedStack
 
 fun main() {
-    var a = CustomArrayList()
-    var b = ArrayListStack()
-    var c = SingleLinkedList()
-    var d = SingleLinkedStack()
+    val customList = CustomArrayList()
+    val arrayStack = ArrayListStack()
+    val linkedList = SingleLinkedList()
+    val linkedStack = SingleLinkedStack()
 
-    a.add(1)
-    a.add(2)
-    a.add(3)
+    customList.add(1)
+    customList.add(2)
+    customList.add(3)
 
-    b.push(2)
-    b.push(4)
-    b.push(10)
+    arrayStack.push(2)
+    arrayStack.push(4)
+    arrayStack.push(10)
 
-    c.add(-2)
-    c.add(-3)
-    c.add(-10)
+    linkedList.add(-2)
+    linkedList.add(-3)
+    linkedList.add(-10)
 
-    d.push(321)
-    d.push(0)
-    d.push(12)
+    linkedStack.push(321)
+    linkedStack.push(0)
+    linkedStack.push(12)
 
     println("CustomArrayList:")
-    ListPrinter.printList(a)
+    ListPrinter.printList(customList)
 
     println("ArrayListStack:")
-    ListPrinter.printList(b)
+    ListPrinter.printList(arrayStack)
 
     println("SingleLinkedList:")
-    ListPrinter.printList(c)
+    ListPrinter.printList(linkedList)
 
     println("SingleLinkedStack:")
-    ListPrinter.printList(d)
-
+    ListPrinter.printList(linkedStack)
 }
